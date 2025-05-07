@@ -10,7 +10,24 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_07_110119) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_07_111649) do
+  create_table "habit_entries", force: :cascade do |t|
+    t.integer "habit_id", null: false
+    t.date "date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string "value", default: "PENDING", null: false
+    t.index ["habit_id"], name: "index_habit_entries_on_habit_id"
+  end
+
+  create_table "habits", force: :cascade do |t|
+    t.string "name"
+    t.integer "user_id", null: false
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["user_id"], name: "index_habits_on_user_id"
+  end
+
   create_table "sessions", force: :cascade do |t|
     t.integer "user_id", null: false
     t.string "ip_address"
@@ -28,5 +45,7 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_07_110119) do
     t.index ["email_address"], name: "index_users_on_email_address", unique: true
   end
 
+  add_foreign_key "habit_entries", "habits"
+  add_foreign_key "habits", "users"
   add_foreign_key "sessions", "users"
 end
