@@ -8,6 +8,7 @@ class HabitsController < ApplicationController
 
   # GET /habits/1 or /habits/1.json
   def show
+    @habit = Habit.find(params.expect(:id))
   end
 
   # GET /habits/new

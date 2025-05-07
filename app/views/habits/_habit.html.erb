@@ -1,3 +1,15 @@
 <div id="<%= dom_id habit %>">
-    <%= habit.name %>
+    <b><%= habit.name %></b>
+    <div class="week-entries">
+        <% habit.entries_for_current_week.each do |entry| %>
+            <div class="entry" style="display: flex; gap: 8px">
+                <div class="date"><%= entry.date.strftime("%A") %></div>
+                <% if entry.persisted? %>
+                    <%= entry.status %>
+                <% else %>
+                    <span>(<%= link_to "Add", new_habit_habit_entry_path(habit, date: entry.date) %>)</span>
+                <% end %>
+            </div>
+        <% end %>
+    </div>
 </div>
