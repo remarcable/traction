@@ -32,7 +32,7 @@ class HabitsTest < ApplicationSystemTestCase
 
   test "should destroy Habit" do
     visit habit_url(@habit)
-    click_on "Destroy this habit", match: :first
+    click_on "Remove habit", match: :first
 
     assert_text "Habit was successfully destroyed"
   end

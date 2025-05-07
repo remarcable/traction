@@ -8,9 +8,9 @@
   <% @habit_entries.each do |habit_entry| %>
     <%= render habit_entry %>
     <p>
-      <%= link_to "Show this habit entry", habit_entry %>
+      <%= link_to "Show this habit entry", [@habit, habit_entry] %>
     </p>
   <% end %>
 </div>
 
-<%= link_to "New habit entry", new_habit_entry_path %>
+<%= link_to "New habit entry", [:new, @habit, :habit_entry] %>

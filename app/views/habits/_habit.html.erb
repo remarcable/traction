@@ -3,11 +3,11 @@
     <div class="week-entries">
         <% habit.entries_for_current_week.each do |entry| %>
             <div class="entry" style="display: flex; gap: 8px">
-                <div class="date"><%= entry.date.strftime("%A") %></div>
+                <div class="date"><%= entry.date.strftime("%a")[0..1] %></div>
                 <% if entry.persisted? %>
                     <%= entry.status %>
                 <% else %>
-                    <span>(<%= link_to "Add", new_habit_habit_entry_path(habit, date: entry.date) %>)</span>
+                    <span>(<%= link_to "Add", [:new, habit, :habit_entry, date: entry.date] %>)</span>
                 <% end %>
             </div>
         <% end %>

@@ -1,5 +1,6 @@
 class HabitEntriesController < ApplicationController
   before_action :set_habit_entry, only: %i[ show edit update destroy ]
+  before_action :set_habit
 
   # GET /habit_entries or /habit_entries.json
   def index
@@ -12,7 +13,7 @@ class HabitEntriesController < ApplicationController
 
   # GET /habit_entries/new
   def new
-    @habit_entry = HabitEntry.new
+    @habit_entry = @habit.habit_entries.build(date: params[:date])
   end
 
   # GET /habit_entries/1/edit
@@ -21,16 +22,11 @@ class HabitEntriesController < ApplicationController
 
   # POST /habit_entries or /habit_entries.json
   def create
-    @habit_entry = HabitEntry.new(habit_entry_params)
-
-    respond_to do |format|
-      if @habit_entry.save
-        format.html { redirect_to @habit_entry, notice: "Habit entry was successfully created." }
-        format.json { render :show, status: :created, location: @habit_entry }
-      else
-        format.html { render :new, status: :unprocessable_entity }
-        format.json { render json: @habit_entry.errors, status: :unprocessable_entity }
-      end
+    @habit_entry = @habit.habit_entries.build(habit_entry_params)
+    if @habit_entry.save
+      redirect_to @habit, notice: 'Entry was successfully created.'
+    else
+      render :new
     end
   end
 
@@ -38,7 +34,7 @@ class HabitEntriesController < ApplicationController
   def update
     respond_to do |format|
       if @habit_entry.update(habit_entry_params)
-        format.html { redirect_to @habit_entry, notice: "Habit entry was successfully updated." }
+        format.html { redirect_to habit_habit_entry_path(@habit, @habit_entry), notice: "Habit entry was successfully updated." }
         format.json { render :show, status: :ok, location: @habit_entry }
       else
         format.html { render :edit, status: :unprocessable_entity }
@@ -52,7 +48,7 @@ class HabitEntriesController < ApplicationController
     @habit_entry.destroy!
 
     respond_to do |format|
-      format.html { redirect_to habit_entries_path, status: :see_other, notice: "Habit entry was successfully destroyed." }
+      format.html { redirect_to @habit, status: :see_other, notice: "Habit entry was successfully destroyed." }
       format.json { head :no_content }
     end
   end
@@ -63,8 +59,12 @@ class HabitEntriesController < ApplicationController
       @habit_entry = HabitEntry.find(params.expect(:id))
     end
 
+    def set_habit
+      @habit = Habit.find(params[:habit_id])
+    end
+
     # Only allow a list of trusted parameters through.
     def habit_entry_params
-      params.fetch(:habit_entry, {})
+      params.require(:habit_entry).permit(:date, :status)
     end
 end

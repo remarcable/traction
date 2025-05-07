@@ -1,4 +1,4 @@
-<%= form_with(model: habit_entry) do |form| %>
+<%= form_with(model: [@habit, habit_entry]) do |form| %>
   <% if habit_entry.errors.any? %>
     <div style="color: red">
       <h2><%= pluralize(habit_entry.errors.count, "error") %> prohibited this habit_entry from being saved:</h2>
@@ -10,6 +10,13 @@
       </ul>
     </div>
   <% end %>
+
+  <%= form.date_field :date %>
+
+  <div>
+    <%= form.label :status, style: "display: block" %>
+    <%= form.select :status, HabitEntry.statuses.keys %>
+  </div>
 
   <div>
     <%= form.submit %>

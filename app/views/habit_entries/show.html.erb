@@ -3,8 +3,8 @@
 <%= render @habit_entry %>
 
 <div>
-  <%= link_to "Edit this habit entry", edit_habit_entry_path(@habit_entry) %> |
-  <%= link_to "Back to habit entries", habit_entries_path %>
+  <%= link_to "Edit this habit entry", [:edit, @habit, @habit_entry] %> |
+  <%= link_to "Back to habit entries", [@habit, :habit_entries] %>
 
-  <%= button_to "Destroy this habit entry", @habit_entry, method: :delete %>
+  <%= button_to "Remove habit entry", [:habit, @habit_entry], method: :delete %>
 </div>
