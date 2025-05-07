@@ -10,13 +10,14 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_07_111649) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_07_131115) do
   create_table "habit_entries", force: :cascade do |t|
     t.integer "habit_id", null: false
     t.date "date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
-    t.string "value", default: "PENDING", null: false
+    t.string "status", default: "PENDING", null: false
+    t.index ["habit_id", "date"], name: "index_habit_entries_on_habit_id_and_date", unique: true
     t.index ["habit_id"], name: "index_habit_entries_on_habit_id"
   end
 

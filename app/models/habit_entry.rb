@@ -1,11 +1,9 @@
 class HabitEntry < ApplicationRecord
   belongs_to :habit
   validates :date, presence: true
-  validates :value, presence: true
+  validates :status, presence: true
 
-  add_index :habit_entries, [:habit_id, :date], unique: true
-
-  enum value: {
+  enum :status, {
     pending: 'PENDING',
     completed: 'COMPLETED',
     failed: 'FAILED',
