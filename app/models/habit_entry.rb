@@ -4,9 +4,9 @@ class HabitEntry < ApplicationRecord
   validates :status, presence: true
 
   enum :status, {
-    pending: 'PENDING',
-    completed: 'COMPLETED',
-    failed: 'FAILED',
-    skipped: 'SKIPPED'
+    pending: "PENDING",
+    completed: "COMPLETED",
+    failed: "FAILED",
+    skipped: "SKIPPED"
   }
 end
