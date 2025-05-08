@@ -1,10 +1,10 @@
 class HabitEntriesController < ApplicationController
-  before_action :set_habit_entry, only: %i[ show edit update destroy ]
   before_action :set_habit
+  before_action :set_habit_entry, only: %i[ show edit update destroy ]
 
   # GET /habit_entries or /habit_entries.json
   def index
-    @habit_entries = HabitEntry.all
+    @habit_entries = @habit.habit_entries
   end
 
   # GET /habit_entries/1 or /habit_entries/1.json
@@ -22,9 +22,10 @@ class HabitEntriesController < ApplicationController
 
   # POST /habit_entries or /habit_entries.json
   def create
+    # TODO: If entry for date already exists, silently update it?
     @habit_entry = @habit.habit_entries.build(habit_entry_params)
     if @habit_entry.save
-      redirect_to @habit, notice: 'Entry was successfully created.'
+      redirect_to @habit, notice: "Entry was successfully created."
     else
       render :new
     end
@@ -56,11 +57,11 @@ class HabitEntriesController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_habit_entry
-      @habit_entry = HabitEntry.find(params.expect(:id))
+      @habit_entry = @habit.habit_entries.find(params.expect(:id))
     end
 
     def set_habit
-      @habit = Habit.find(params[:habit_id])
+      @habit = Current.session.user.habits.find(params[:habit_id])
     end
 
     # Only allow a list of trusted parameters through.

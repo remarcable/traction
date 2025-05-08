@@ -3,12 +3,12 @@ class HabitsController < ApplicationController
 
   # GET /habits or /habits.json
   def index
-    @habits = Habit.all
+    @habits = Current.session.user.habits
   end
 
   # GET /habits/1 or /habits/1.json
   def show
-    @habit = Habit.find(params.expect(:id))
+    @habit = Current.session.user.habits.find(params[:id])
   end
 
   # GET /habits/new
@@ -60,12 +60,10 @@ class HabitsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
     def set_habit
-      @habit = Habit.find(params.expect(:id))
+      @habit = Current.session.user.habits.find(params[:id])
     end
 
-    # Only allow a list of trusted parameters through.
     def habit_params
       params.require(:habit).permit(:name)
     end
