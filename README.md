@@ -1,24 +1,15 @@
-# README
+# Traction
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+A simple streak tracker to build and maintain daily habits.
 
-Things you may want to cover:
+## Getting Started
 
-* Ruby version
+1. Clone the repository
+2. Install dependencies: `bundle install`
+3. Set up the database: `bin/rails db:setup`
+4. Start the server: `bin/rails server`
+5. Visit `http://localhost:3000`
 
-* System dependencies
+## Motivation
 
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+I've always wanted a super simple streak tracker that's not distracting and where you can access the raw data. This project is my attempt to build something like that, and explore Ruby on Rails at the same time.
