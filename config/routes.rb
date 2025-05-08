@@ -1,6 +1,15 @@
 Rails.application.routes.draw do
   resources :habits do
-    resources :habit_entries, path: "entries"
+    resources :habit_entries, path: "entries" do
+      member do
+        patch :cycle_status
+      end
+
+      # TODO: What is the difference between collection/member? Any other keywords?
+      collection do
+        post :create_and_cycle
+      end
+    end
   end
   resource :session
   resources :passwords, param: :token

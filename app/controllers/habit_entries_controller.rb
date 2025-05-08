@@ -1,6 +1,6 @@
 class HabitEntriesController < ApplicationController
   before_action :set_habit
-  before_action :set_habit_entry, only: %i[ show edit update destroy ]
+  before_action :set_habit_entry, only: %i[ show edit update destroy cycle_status ]
 
   # GET /habit_entries or /habit_entries.json
   def index
@@ -54,10 +54,32 @@ class HabitEntriesController < ApplicationController
     end
   end
 
+  def cycle_status
+    current_index = HabitEntry.statuses.keys.index(@habit_entry.status)
+    next_index = (current_index + 1) % HabitEntry.statuses.keys.length
+    next_status = HabitEntry.statuses.keys[next_index]
+
+    @habit_entry.update(status: next_status)
+    redirect_to request.referer
+  end
+
+  def create_and_cycle
+    @habit_entry = @habit.habit_entries.build(
+      date: params[:date],
+      status: HabitEntry.statuses.keys[1]
+    )
+
+    if @habit_entry.save
+      redirect_to request.referer
+    else
+      redirect_to request.referer, alert: "Could not create entry"
+    end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_habit_entry
-      @habit_entry = @habit.habit_entries.find(params.expect(:id))
+      @habit_entry = @habit.habit_entries.find(params[:id])
     end
 
     def set_habit
