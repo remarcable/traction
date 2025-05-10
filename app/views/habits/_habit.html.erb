@@ -1,20 +1,31 @@
-<div id="<%= dom_id habit %>">
-    <b><%= habit.name %></b>
-    <div class="week-entries">
-        <% habit.entries_for_current_week.each do |entry| %>
-            <div class="entry" style="display: flex; gap: 8px">
-                <div class="date"><%= entry.date.strftime("%a")[0..1] %></div>
+<div id="<%= dom_id habit %>" class="mb-4 flex flex-col gap-2 items-center">
+    <%= link_to habit_path(habit), class: "hover:underline" do %>
+        <h2 class="text-2xl font-bold tracking-tight">
+            <%= habit.name %>
+        </h2>
+    <% end %>
+    <div class="flex flex-row gap-2">
+        <% habit.entries_for_current_week.each do |entry| %>    
+            <div>
                 <% if entry.persisted? %>
-                    <%= button_to entry.status, 
-                        cycle_status_habit_habit_entry_path(habit, entry), 
+                    <%= button_to cycle_status_habit_habit_entry_path(habit, entry), 
                         method: :patch,
-                        class: "hover:underline bg-transparent border-0 p-0 text-left" %>
+                        class: "w-16 h-16 rounded-sm flex items-center justify-center cursor-pointer #{entry.status == 'completed' ? 'bg-green-100' : entry.status == 'failed' ? 'bg-red-100' : entry.status == 'skipped' ? 'bg-yellow-100' : 'bg-slate-100'}" do %>
+                            <% if entry.status == 'completed' %>
+                                <%= heroicon "check", type: :outline, class: "text-green-600" %>
+                            <% elsif entry.status == 'failed' %>
+                                <%= heroicon "x-mark", type: :outline, class: "text-red-600" %>
+                            <% elsif entry.status == 'skipped' %>
+                                <%= heroicon "forward", type: :outline, class: "text-yellow-600" %>
+                            <% end %>
+                    <% end %>
                 <% else %>
-                    <%= button_to "pending", 
-                        create_and_cycle_habit_habit_entries_path(habit, date: entry.date),
+                    <%= button_to create_and_cycle_habit_habit_entries_path(habit, date: entry.date),
                         method: :post,
-                        class: "hover:underline bg-transparent border-0 p-0 text-left text-gray-500" %>
+                        class: "w-16 h-16 rounded-sm flex items-center justify-center cursor-pointer bg-slate-100" do %>
+                    <% end %>
                 <% end %>
+                <div class="text-center <%= entry.status == 'completed' ? 'text-green-400' : entry.status == 'failed' ? 'text-red-400' : entry.status == 'skipped' ? 'text-yellow-400' : 'text-slate-400' %>"><%= entry.date.strftime("%a")[0..1] %></div>
             </div>
         <% end %>
     </div>

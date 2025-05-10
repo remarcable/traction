@@ -2,15 +2,17 @@
 
 <% content_for :title, "Habits" %>
 
-<h1>Habits</h1>
+<h1 class="text-4xl font-bold tracking-tight mb-12 text-center">Traction</h1>
 
-<div id="habits">
+<div class="mb-12">
   <% @habits.each do |habit| %>
     <%= render habit %>
-    <p>
-      <%= link_to "Show this habit", habit %>
-    </p>
   <% end %>
 </div>
 
-<%= link_to "New habit", new_habit_path %>
+<div class="flex justify-center">
+  <%= link_to new_habit_path, class: "inline-flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-500 rounded-lg hover:bg-slate-200 transition-colors" do %>
+    <%= heroicon "plus", type: :outline, class: "w-5 h-5" %>
+    <span>Add Habit</span>
+  <% end %>
+</div>
