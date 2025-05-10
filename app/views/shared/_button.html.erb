@@ -1,0 +1,15 @@
+<% if local_assigns[:link].present? %>
+  <%= link_to link, class: "inline-flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-500 rounded-lg hover:bg-slate-200 transition-colors" do %>
+    <% if local_assigns[:icon].present? %>
+      <%= heroicon icon, type: :outline, class: "w-5 h-5" %>
+    <% end %>
+    <span><%= title %></span>
+  <% end %>
+<% else %>
+  <button class="inline-flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-500 rounded-lg hover:bg-slate-200 transition-colors">
+    <% if local_assigns[:icon].present? %>
+      <%= heroicon icon, type: :outline, class: "w-5 h-5" %>
+    <% end %>
+    <span><%= title %></span>
+  </button>
+<% end %>
