@@ -1,31 +1,30 @@
-<div id="<%= dom_id habit %>" class="mb-4 flex flex-col gap-2 items-center">
-    <%= link_to habit_path(habit), class: "hover:underline" do %>
-        <h2 class="text-2xl font-bold tracking-tight">
+<div id="<%= dom_id habit %>" class="habit">
+    <%= link_to habit_path(habit), class: "habit__nameLink" do %>
+        <h2 class="habit__name">
             <%= habit.name %>
         </h2>
     <% end %>
-    <div class="flex flex-row gap-2">
+    <div class="habit__entries">
         <% habit.entries_for_current_week.each do |entry| %>    
             <div>
+            <% icon, color = entry_status_icon_and_color(entry) %>
                 <% if entry.persisted? %>
                     <%= button_to cycle_status_habit_habit_entry_path(habit, entry), 
                         method: :patch,
-                        class: "w-16 h-16 rounded-sm flex items-center justify-center cursor-pointer #{entry.status == 'completed' ? 'bg-green-100' : entry.status == 'failed' ? 'bg-red-100' : entry.status == 'skipped' ? 'bg-yellow-100' : 'bg-slate-100'}" do %>
-                            <% if entry.status == 'completed' %>
-                                <%= heroicon "check", type: :outline, class: "text-green-600" %>
-                            <% elsif entry.status == 'failed' %>
-                                <%= heroicon "x-mark", type: :outline, class: "text-red-600" %>
-                            <% elsif entry.status == 'skipped' %>
-                                <%= heroicon "forward", type: :outline, class: "text-yellow-600" %>
-                            <% end %>
+                        class: "habit__entryButton habit__entryButton--#{color}" do %>
+                        <% if icon %>
+                            <%= heroicon icon, type: :outline, class: "habit__entryButtonIcon #{color}" %>
+                        <% end %>
                     <% end %>
                 <% else %>
                     <%= button_to create_and_cycle_habit_habit_entries_path(habit, date: entry.date),
                         method: :post,
-                        class: "w-16 h-16 rounded-sm flex items-center justify-center cursor-pointer bg-slate-100" do %>
+                        class: "habit__entryButton habit__entryButton--#{color}" do %>
                     <% end %>
                 <% end %>
-                <div class="text-center <%= entry.status == 'completed' ? 'text-green-400' : entry.status == 'failed' ? 'text-red-400' : entry.status == 'skipped' ? 'text-yellow-400' : 'text-slate-400' %>"><%= entry.date.strftime("%a")[0..1] %></div>
+                <div class="habit__entryDay <%= "habit__entryDay--#{color}" %>">
+                    <%= entry.date.strftime("%a")[0..1] %>
+                </div>
             </div>
         <% end %>
     </div>
