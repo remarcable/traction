@@ -48,3 +48,7 @@
   font-size: calc(var(--spacing-unit) * 2);
   font-weight: var(--font-weight-medium);
 }
+
+.notice__list {
+  margin-bottom: calc(var(--spacing-unit) * 2);
+}

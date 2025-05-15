@@ -1,0 +1,32 @@
+.session__container {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  max-width: calc(var(--spacing-unit) * 50);
+  min-height: calc(100vh - var(--spacing-unit) * 12 * 2);
+  flex-grow: 1;
+}
+
+.session__form--withBackground {
+  background-color: var(--color-slate-bg-light);
+  padding: calc(var(--spacing-unit) * 4);
+  border-radius: calc(var(--spacing-unit) * 0.5);
+}
+
+.session__formField {
+  width: 100%;
+}
+
+.session__submitButton {
+  background-color: var(--color-green-bg);
+  color: var(--color-green-text);
+}
+
+.session__submitButton:hover {
+  background-color: var(--color-green-bg-hover);
+}
+
+.session__link {
+  color: var(--color-slate-text);
+  text-align: center;
+}
