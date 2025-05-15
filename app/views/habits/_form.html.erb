@@ -1,16 +1,16 @@
-<%= form_with(model: habit) do |form| %>
+<%= form_with(model: habit, class: "form") do |form| %>
   <% if habit.errors.any? %>
-    <div class="rounded-md bg-red-50 p-4">
-      <div class="flex">
-        <div class="flex-shrink-0">
-          <%= heroicon "x-circle", class: "h-5 w-5 text-red-400" %>
+    <div class="notice">
+      <div class="notice__container">
+        <div class="notice__icon">
+          <%= heroicon "x-circle" %>
         </div>
-        <div class="ml-3">
-          <h3 class="text-sm font-medium text-red-800">
+        <div class="notice__content">
+          <h3 class="notice__title">
             <%= pluralize(habit.errors.count, "error") %> prohibited this habit from being saved:
           </h3>
-          <div class="mt-2 text-sm text-red-700">
-            <ul class="list-disc space-y-1 pl-5">
+          <div class="notice__list">
+            <ul>
               <% habit.errors.each do |error| %>
                 <li><%= error.full_message %></li>
               <% end %>
@@ -19,12 +19,12 @@
         </div>
       </div>
     </div>
+
   <% end %>
 
-  <div class="space-y-2">
-    <%= form.label :name, class: "block text-sm font-medium text-slate-700" %>
+  <div class="form__field">
+    <%= form.label :name %>
     <%= form.text_field :name, 
-        class: "block w-full rounded-lg border-slate-200 bg-white px-4 py-2 text-slate-500 shadow-sm focus:border-slate-300 focus:ring-slate-300 sm:text-sm",
         placeholder: "Enter habit name" %>
   </div>
 
