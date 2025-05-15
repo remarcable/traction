@@ -1,8 +1,8 @@
 <%
-  button_classes = "inline-flex items-center gap-2 px-4 py-2 bg-slate-100 text-slate-500 rounded-lg hover:bg-slate-200 transition-colors"
+  button_classes = "button"
   button_content = capture do
     if local_assigns[:icon].present?
-      concat heroicon(icon, type: :outline, class: "w-5 h-5")
+      concat heroicon(icon, type: :outline)
     end
     concat content_tag(:span, title)
   end
