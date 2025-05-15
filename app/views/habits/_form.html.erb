@@ -1,25 +1,14 @@
 <%= form_with(model: habit, class: "form") do |form| %>
   <% if habit.errors.any? %>
-    <div class="notice">
-      <div class="notice__container">
-        <div class="notice__icon">
-          <%= heroicon "x-circle" %>
-        </div>
-        <div class="notice__content">
-          <h3 class="notice__title">
-            <%= pluralize(habit.errors.count, "error") %> prohibited this habit from being saved:
-          </h3>
-          <div class="notice__list">
-            <ul>
-              <% habit.errors.each do |error| %>
-                <li><%= error.full_message %></li>
-              <% end %>
-            </ul>
-          </div>
-        </div>
-      </div>
-    </div>
-
+    <%= render "shared/notice",
+      title: pluralize(habit.errors.count, "error") + " prohibited this habit from being saved:",
+      status: "error" do %>
+      <ul>
+        <% habit.errors.each do |error| %>
+          <li><%= error.full_message %></li>
+        <% end %>
+      </ul>
+    <% end %>
   <% end %>
 
   <div class="form__field">

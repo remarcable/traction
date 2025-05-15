@@ -1,0 +1,20 @@
+<div class="notice notice--<%= status || 'neutral' %>">
+  <div class="notice__container">
+    <div class="notice__icon">
+      <%= heroicon case status
+        when 'success' then 'check-circle'
+        when 'warning' then 'exclamation-triangle'
+        when 'error' then 'x-circle'
+        else 'information-circle'
+      end %>
+    </div>
+    <div class="notice__content">
+      <h3 class="notice__title">
+        <%= title %>
+      </h3>
+      <div class="notice__list">
+        <%= yield %>
+      </div>
+    </div>
+  </div>
+</div> 
