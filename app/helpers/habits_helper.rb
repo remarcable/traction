@@ -1,9 +1,9 @@
 module HabitsHelper
   STATUS_ICONS = {
-    completed: ["check", "green"],
-    failed: ["x-mark", "red"],
-    skipped: ["forward", "yellow"],
-    pending: [nil, "slate"]
+    completed: [ "check", "green" ],
+    failed: [ "x-mark", "red" ],
+    skipped: [ "forward", "yellow" ],
+    pending: [ nil, "slate" ]
   }.freeze
 
   def entry_status_icon_and_color(entry)
