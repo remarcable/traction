@@ -1,6 +1,7 @@
 .notice {
   border-radius: calc(var(--spacing-unit) * 0.5);
-  padding: calc(var(--spacing-unit)) calc(var(--spacing-unit) * 8);
+  padding: var(--spacing-unit) calc(var(--spacing-unit) * 8);
+  margin-bottom: calc(var(--spacing-unit) * 4);
 }
 
 .notice--error {
@@ -26,6 +27,12 @@
 .notice__container {
   display: flex;
   align-items: center;
+}
+
+.notice__icon {
+  display: flex;
+  align-content: center;
+  justify-content: center;
 }
 
 .notice__icon svg {
