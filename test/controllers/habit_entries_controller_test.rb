@@ -30,11 +30,11 @@ class HabitEntriesControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should create new habit entry with different dates" do
-    dates = [Date.tomorrow, Date.tomorrow + 1.day]
+    dates = [ Date.tomorrow, Date.tomorrow + 1.day ]
     dates.each do |date|
       assert_difference("HabitEntry.count") do
-        post create_and_cycle_habit_habit_entries_url(@habit), 
-             params: { date: date }, 
+        post create_and_cycle_habit_habit_entries_url(@habit),
+             params: { date: date },
              **with_referer
       end
       assert_response :redirect
@@ -47,14 +47,14 @@ class HabitEntriesControllerTest < ActionDispatch::IntegrationTest
   test "should not create duplicate entries for same date" do
     date = Date.tomorrow
     assert_difference("HabitEntry.count") do
-      post create_and_cycle_habit_habit_entries_url(@habit), 
-           params: { date: date }, 
+      post create_and_cycle_habit_habit_entries_url(@habit),
+           params: { date: date },
            **with_referer
     end
 
     assert_no_difference("HabitEntry.count") do
-      post create_and_cycle_habit_habit_entries_url(@habit), 
-           params: { date: date }, 
+      post create_and_cycle_habit_habit_entries_url(@habit),
+           params: { date: date },
            **with_referer
     end
     assert_redirected_to request.referer
@@ -63,8 +63,8 @@ class HabitEntriesControllerTest < ActionDispatch::IntegrationTest
 
   test "should handle failed habit entry creation" do
     assert_no_difference("HabitEntry.count") do
-      post create_and_cycle_habit_habit_entries_url(@habit), 
-           params: { date: nil }, 
+      post create_and_cycle_habit_habit_entries_url(@habit),
+           params: { date: nil },
            **with_referer
     end
 
