@@ -1,6 +1,6 @@
 .habits__container {
-  max-width: 1200px;
-  margin: 96px auto;
+  max-width: calc(var(--spacing-unit) * 150);
+  margin: calc(var(--spacing-unit) * 12) auto;
 
   display: flex;
   flex-direction: column;
@@ -10,13 +10,13 @@
 
 .habits__title {
   margin: 0;
-  margin-bottom: 48px;
+  margin-bottom: calc(var(--spacing-unit) * 6);
   text-align: center;
-  font-size: 42px;
-  font-weight: 800;
-  letter-spacing: -0.04em;
+  font-size: calc(var(--spacing-unit) * 5);
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--tracking-tight);
 }
 
 .habits__habits {
-  margin-bottom: 36px;
+  margin-bottom: calc(var(--spacing-unit) * 4);
 }

@@ -3,17 +3,17 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  gap: 8px;
-  margin-bottom: 36px;
+  gap: var(--spacing-unit);
+  margin-bottom: calc(var(--spacing-unit) * 4);
 }
 
 .habit__name {
-  font-size: 28px;
-  font-weight: 600;
+  font-size: calc(var(--spacing-unit) * 3);
+  font-weight: var(--font-weight-medium);
   color: #1c2024;
-  letter-spacing: -0.02em;
+  letter-spacing: var(--tracking-tight);
   margin: 0;
-  margin-bottom: 8px;
+  margin-bottom: var(--spacing-unit);
 }
 
 .habit__nameLink {
@@ -28,86 +28,86 @@
 .habit__entries {
   display: flex;
   flex-direction: row;
-  gap: 8px;
+  gap: var(--spacing-unit);
 }
 
 .habit__entryButton {
-  width: 64px;
-  height: 64px;
-  border-radius: 8px;
+  width: calc(var(--spacing-unit) * 8);
+  height: calc(var(--spacing-unit) * 8);
+  border-radius: var(--spacing-unit);
   background-color: #f0f0f3;
   border: 0;
   cursor: pointer;
-  margin-bottom: 8px;
+  margin-bottom: var(--spacing-unit);
   display: flex;
   align-items: center;
   justify-content: center;
-  transition: background-color 0.2s ease-in-out;
+  transition: var(--transition-bg);
 }
 
 .habit__entryButton svg {
-  width: 28px;
-  height: 28px;
+  width: calc(var(--spacing-unit) * 4);
+  height: calc(var(--spacing-unit) * 4);
 }
 
 .habit__entryButton:hover {
-  background-color: #e8e8ec;
+  background-color: var(--color-slate-bg-hover);
 }
 
 .habit__entryButton--green {
-  background-color: #e6f6eb;
-  color: #218358;
+  background-color: var(--color-green-bg);
+  color: var(--color-green-text);
 
   &:hover {
-    background-color: #d6f1df;
+    background-color: var(--color-green-bg-hover);
   }
 }
 
 .habit__entryButton--red {
-  background-color: #ffdbdc;
-  color: #ce2c31;
+  background-color: var(--color-red-bg);
+  color: var(--color-red-text);
 
   &:hover {
-    background-color: #ffdbdc;
+    background-color: var(--color-red-bg-hover);
   }
 }
 
 .habit__entryButton--yellow {
-  background-color: #fffab8;
-  color: #9e6c00;
+  background-color: var(--color-yellow-bg);
+  color: var(--color-yellow-text);
 
   &:hover {
-    background-color: #fff394;
+    background-color: var(--color-yellow-bg-hover);
   }
 }
 
 .habit__entryButton--slate {
-  background-color: #f0f0f3;
-  color: #1c2024;
+  background-color: var(--color-slate-bg);
+  color: var(--color-slate-text);
 
   &:hover {
-    background-color: #e8e8ec;
+    background-color: var(--color-slate-bg-hover);
   }
 }
 
 .habit__entryDay {
-  font-weight: 500;
-  color: #d9d9e0;
+  font-weight: var(--font-weight-normal);
+  color: var(--color-slate-text-light);
   text-align: center;
 }
 
 .habit__entryDay--green {
-  color: #8eceaa;
+  color: var(--color-green-text-light);
 }
 
 .habit__entryDay--red {
-  color: #f4a9aa;
+  color: var(--color-red-text-light);
 }
 
 .habit__entryDay--yellow {
-  color: #e4c767;
+  color: var(--color-yellow-text-light);
 }
 
 .habit__entryDay--slate {
-  color: #d9d9e0;
+  color: var(--color-slate-text-light);
 }

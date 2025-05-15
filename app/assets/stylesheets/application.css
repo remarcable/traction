@@ -9,6 +9,39 @@
  * Consider organizing styles into separate files for maintainability.
  */
 
+:root {
+  --spacing-unit: 8px;
+
+  --font-family: "Inter", sans-serif;
+  --tracking-tight: -0.02em;
+
+  --font-weight-normal: 400;
+  --font-weight-medium: 600;
+  --font-weight-bold: 800;
+
+  --color-green-bg: #e6f6eb;
+  --color-green-bg-hover: #d6f1df;
+  --color-green-text: #218358;
+  --color-green-text-light: #8eceaa;
+
+  --color-red-bg: #feebec;
+  --color-red-bg-hover: #ffdbdc;
+  --color-red-text: #ce2c31;
+  --color-red-text-light: #f4a9aa;
+
+  --color-yellow-bg: #fffab8;
+  --color-yellow-bg-hover: #fff394;
+  --color-yellow-text: #9e6c00;
+  --color-yellow-text-light: #e4c767;
+
+  --color-slate-bg: #f0f0f3;
+  --color-slate-bg-hover: #e8e8ec;
+  --color-slate-text: #1c2024;
+  --color-slate-text-light: #d9d9e0;
+
+  --transition-bg: background-color 0.2s ease-in-out;
+}
+
 body {
-  font-family: "Inter", sans-serif;
+  font-family: var(--font-family);
 }
