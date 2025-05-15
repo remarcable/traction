@@ -32,9 +32,9 @@
 }
 
 .habit__entryButton {
-  width: calc(var(--spacing-unit) * 8);
-  height: calc(var(--spacing-unit) * 8);
-  border-radius: var(--spacing-unit);
+  width: calc(var(--spacing-unit) * 5);
+  height: calc(var(--spacing-unit) * 5);
+  border-radius: calc(var(--spacing-unit) * 0.5);
   background-color: #f0f0f3;
   border: 0;
   cursor: pointer;
@@ -45,9 +45,24 @@
   transition: var(--transition-bg);
 }
 
+@media (min-width: 768px) {
+  .habit__entryButton {
+    width: calc(var(--spacing-unit) * 8);
+    height: calc(var(--spacing-unit) * 8);
+    border-radius: var(--spacing-unit);
+  }
+}
+
 .habit__entryButton svg {
-  width: calc(var(--spacing-unit) * 4);
-  height: calc(var(--spacing-unit) * 4);
+  width: calc(var(--spacing-unit) * 3);
+  height: calc(var(--spacing-unit) * 3);
+}
+
+@media (min-width: 768px) {
+  .habit__entryButton svg {
+    width: calc(var(--spacing-unit) * 4);
+    height: calc(var(--spacing-unit) * 4);
+  }
 }
 
 .habit__entryButton:hover {
