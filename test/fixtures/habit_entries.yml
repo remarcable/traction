@@ -2,8 +2,10 @@
 
 one:
   habit: one
+  status: "pending"
   date: 2025-05-07
 
 two:
   habit: two
+  status: "success"
   date: 2025-05-07

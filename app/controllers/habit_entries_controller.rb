@@ -22,6 +22,8 @@ class HabitEntriesController < ApplicationController
     else
       redirect_to request.referer, alert: "Could not create entry"
     end
+  rescue ActiveRecord::RecordNotUnique
+    redirect_to request.referer, alert: "Entry already exists for this date"
   end
 
   private
