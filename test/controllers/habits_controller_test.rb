@@ -4,7 +4,7 @@ class HabitsControllerTest < ActionDispatch::IntegrationTest
   setup do
     @user = User.create!(email_address: "test@example.com", password: "secret")
     post "/session", params: { email_address: @user.email_address, password: "secret" }
-    
+
     @habit = Habit.create!(name: "Test Habit", user: @user)
   end
 
