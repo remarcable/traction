@@ -22,5 +22,8 @@
 </div>
 
 <div class="flex justify-center">
-  <%= render "shared/button", title: "Add Habit", icon: "plus", link: new_habit_path %>
+  <%= link_to new_habit_path, class: "button" do %>
+    <%= heroicon "plus" %>
+    Add Habit
+  <% end %>
 </div>
