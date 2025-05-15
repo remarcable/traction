@@ -2,15 +2,10 @@
     <h1 class="habits__title">Sign in</h1>
 
     <% if flash[:alert] %>
-    <%= render "shared/notice", status: "error", title: "Error" do %>
-    <%= flash[:alert] %>
+    <%= render "shared/notice", status: "error", title: flash[:alert] %>
     <% end %>
-    <% end %>
-
     <% if flash[:notice] %>
-    <%= render "shared/notice", status: "success", title: "Success" do %>
-    <%= flash[:notice] %>
-    <% end %>
+    <%= render "shared/notice", status: "success", title: flash[:notice] %>
     <% end %>
 
     <%= form_with url: session_path, class: "form session__form--withBackground" do |form| %>
