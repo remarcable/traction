@@ -1,4 +1,6 @@
 Rails.application.routes.draw do
+  get "habits", to: redirect("/")
+
   resources :habits do
     resources :habit_entries, path: "entries", only: [] do
       member do
@@ -9,8 +11,6 @@ Rails.application.routes.draw do
       end
     end
   end
-
-  get "habits", to: redirect("/")
 
   resource :session
   resources :passwords, param: :token
