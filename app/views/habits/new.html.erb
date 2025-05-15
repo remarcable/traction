@@ -2,10 +2,8 @@
 
 <h1>New habit</h1>
 
-<%= render "form", habit: @habit %>
-
-<br>
-
-<div>
+<div class="habits__linkGroup">
   <%= link_to "Back to habits", habits_path %>
 </div>
+
+<%= render "form", habit: @habit %>

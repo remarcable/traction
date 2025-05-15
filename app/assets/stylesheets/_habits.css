@@ -10,3 +10,27 @@
 .habits__habits {
   margin-bottom: calc(var(--spacing-unit) * 4);
 }
+
+.habits__linkGroup {
+  margin-bottom: calc(var(--spacing-unit) * 3);
+  color: var(--color-slate-text);
+}
+
+.habits__linkGroup a {
+  color: var(--color-slate-text);
+}
+
+.habits__linkGroup a:visited {
+  color: var(--color-slate-text);
+}
+
+.habits__linkGroup form {
+  display: inline;
+}
+
+.habits__linkGroup form button {
+  border: 0;
+  padding: 0;
+  background-color: transparent;
+  text-decoration: underline;
+}

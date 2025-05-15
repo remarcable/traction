@@ -2,11 +2,11 @@
   <%= render "shared/notice", status: "success", title: notice %>
 <% end %>
 
-<%= render @habit %>
-
-<div>
-  <%= link_to "Edit this habit", edit_habit_path(@habit) %> |
-  <%= link_to "Back to habits", habits_path %>
-
-  <%= button_to "Remove habit", @habit, method: :delete %>
+<%= render @habit do %>
+  <div class="habits__linkGroup">
+    <%= link_to "Edit this habit", edit_habit_path(@habit) %> |
+    <%= button_to "Remove habit", @habit, method: :delete, data: { turbo_confirm: "Are you sure you want to remove this habit?" } %> |
+    <%= link_to "Back to habits", habits_path %>
+  </div>
 </div>
+<% end %>

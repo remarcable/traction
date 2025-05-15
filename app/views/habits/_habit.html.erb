@@ -4,6 +4,9 @@
             <%= habit.name %>
         </h2>
     <% end %>
+
+    <%= yield %>
+
     <div class="habit__entries">
         <% habit.entries_for_current_week.each do |entry| %>    
             <div>
