@@ -1,12 +1,31 @@
-# 🚀 Rails Deployment on Uberspace (with Git + Supervisor)
+# Rails Deployment on Uberspace
 
-This guide outlines how to deploy a Rails app to [Uberspace](https://uberspace.de/) using Git, MariaDB, and `supervisord`.
+This guide walks you through deploying a Rails application on [Uberspace](https://uberspace.de/) using Git, MariaDB, and Supervisor. It assumes familiarity with Rails, SSH, Git, and basic Unix commands.
 
-# 1. Set up remote repository
+## Contents
 
-## Create Remote Repository
+- [Rails Deployment on Uberspace](#rails-deployment-on-uberspace)
+  - [Contents](#contents)
+  - [1. Set up remote repository](#1-set-up-remote-repository)
+    - [Create Remote Repository](#create-remote-repository)
+    - [Create app directory with contents of main branch](#create-app-directory-with-contents-of-main-branch)
+    - [Create post-receive hook for automatic deployment](#create-post-receive-hook-for-automatic-deployment)
+    - [Install dependencies](#install-dependencies)
+  - [2. Set up the database](#2-set-up-the-database)
+    - [Set up MySQL](#set-up-mysql)
+    - [Create database tables](#create-database-tables)
+    - [Update indices](#update-indices)
+    - [Verify database setup](#verify-database-setup)
+  - [3. Create a web backend](#3-create-a-web-backend)
+  - [4. Test run application](#4-test-run-application)
+  - [5. Process management with Supervisor](#5-process-management-with-supervisor)
+  - [6. Automate deployment](#6-automate-deployment)
 
-SSH into your uberspace and create a remote repository:
+## 1. Set up remote repository
+
+### Create Remote Repository
+
+SSH into your Uberspace account:
 
 ```bash
 ssh your_uberspace_username@your_uberspace_host
@@ -15,101 +34,91 @@ cd ~/repos/example-app.git
 git init --bare
 ```
 
-Then on your local machine, you can add a remote to push into this repository:
+On your local machine, add this repository as a remote:
 
 ```bash
 # On local machine
-cd path/to/example
+cd path/to/example-app
 git remote add uberspace your_uberspace_username@your_uberspace_host:repos/example-app.git
 ```
 
-The uberspace host is something like `longmore.uberspace.de`.
+The Uberspace host typically has a format like `longmore.uberspace.de`.
 
-## Create app directory with contents of `main` branch
+### Create app directory with contents of main branch
 
-You can now operate with the remote repository and then later set up a `post-receive` hook to automate the deployment. Let's do this manually first.
-
-To start, ssh into your uberspace. I assume that your repo is in `repos/example-app.git`.
-
-Create a folder for your app:
+On Uberspace, create a directory for the application:
 
 ```bash
-# On uberspace
 mkdir -p ~/apps/example-app
-```
-
-This is where we'll deploy to. To copy the contents of the repo there, run:
-
-```bash
 GIT_WORK_TREE="$HOME/apps/example-app" git checkout -f main
 ```
 
-If you check `apps/example-app` you should see the contents of the repo.
+Verify the files were copied:
 
 ```bash
 cd ~/apps/example-app
 ls
 ```
 
-## Create `post-receive` hook to automatically copy changes to app folder
+### Create post-receive hook for automatic deployment
 
-Let's automate this for future pushes by creating a `post-receive` hook:
+Create a hook file in the bare repository to automate deployment:
 
 ```bash
-# On uberspace
+# Create and edit the hook file
 nano ~/repos/example-app.git/hooks/post-receive
 ```
 
-Then add the following to that file:
+Add this content:
 
 ```bash
 #!/bin/bash
 TARGET_DIR="$HOME/apps/example-app"
-GIT_DIR="$HOME/example-app.git"
 
 echo "Deploying to $TARGET_DIR..."
 
-# Checkout the latest code to working dir
 GIT_WORK_TREE="$TARGET_DIR" git checkout -f main
 ```
 
-Press Ctrl+X and press enter to confirm. Next time you push to the repo, the contents of the `main` branch will be copied to `~/apps/example-app`.
-
-## Install dependencies
-
-Now inside your app, install everything:
+Make the hook executable:
 
 ```bash
-# On uberspace
-uberspace tools version use ruby 3.4 # make sure to use the latest version
+chmod +x ~/repos/example-app.git/hooks/post-receive
+```
+
+### Install dependencies
+
+In your app directory on Uberspace:
+
+```bash
+# Set Ruby version
+uberspace tools version use ruby 3.4
+
+# Configure bundler
 bundle lock --add-platform ruby
 bundle config set force_ruby_platform true
+
+# Install dependencies
 bundle install
 ```
 
-The first command makes sure we're using the most recent version of Ruby. The next two commands make sure all dependencies with native modules are compiled using that version. The last command installs the gems.
+## 2. Set up the database
 
-# 2. Set up the database
+### Set up MySQL
 
-Let's continue with setting up the DB.
+Update your Gemfile:
 
-## Set up MySQL instead of SQLite
-
-Instead of using SQLite, use MySQL/MariaDB. SQLite fails because of dependency version mismatches on uberspace.
-
-So in your `Gemfile` replace the `sqlite3` line with the following:
-
-```gemfile
-# On local machine
+```ruby
 group :development, :test do
   gem "sqlite3", ">= 2.1"
 end
+
 group :production do
   gem 'mysql2', '~> 0.5.2'
 end
 ```
 
-Use the MySQL adapter in `config/database.yml`:
+Configure `config/database.yml` for production:
 
 ```yaml
 production:
@@ -120,76 +129,58 @@ production:
     username: <%= ENV.fetch("RAILS_DB_USERNAME") %>
     password: <%= ENV.fetch("RAILS_DB_PASSWORD") %>
     host: localhost
-    database: mrc_traction_production
+    database: username_appname_production
 
   cache:
     <<: *primary
-    database: mrc_traction_production_cache
+    database: username_appname_production_cache
     migrations_paths: db/cache_migrate
 
   queue:
     <<: *primary
-    database: mrc_traction_production_queue
+    database: username_appname_production_queue
     migrations_paths: db/queue_migrate
 
   cable:
     <<: *primary
-    database: mrc_traction_production_cable
+    database: username_appname_production_cable
     migrations_paths: db/cable_migrate
 ```
 
-As we are using environment variables, you have to make sure that they are set. I chose to use `dotenv-rails`:
+Important: Replace `username_appname` with your Uberspace username and app name. Database names must start with your username (see [the manual](https://manual.uberspace.de/database-mysql/#additional-databases) for more details.)
 
-At the top of your `Gemfile`, add:
+Create `.env.production` on Uberspace:
 
-```Gemfile
+```
+RAILS_DB_USERNAME=your_uberspace_username
+RAILS_DB_PASSWORD=find_in_~/.my.cnf
+SECRET_KEY_BASE=... # generate with: bundle exec rails secret
+```
+
+Add `dotenv-rails` to your Gemfile:
+
+```ruby
 gem 'dotenv-rails', :groups => [:production, :development, :test]
 ```
 
-Then create environment variables. Locally create an `.env` with empty values:
+Then run locally:
 
 ```bash
-RAILS_DB_USERNAME=
-RAILS_DB_PASSWORD=
-SECRET_KEY_BASE=
-```
-
-Then on your Uberspace, create `.env.production` inside `apps/example-app`:
-
-```bash
-# On uberspace
-RAILS_DB_USERNAME=your_uberspace_username
-RAILS_DB_PASSWORD=find_in_~/.my.cnf
-SECRET_KEY_BASE=... # output of running `rails secret`
-```
-
-Find the MySQL password on your Uberspace in `~/.my.cnf`. The database names have to follow the schema `[username]_*`, see [more info in the manual](https://manual.uberspace.de/database-mysql/#additional-databases).
-
-Populate the `SECRET_KEY_BASE` with the output of `bundle rails secret`. It's important for later.
-
-Then install everything on your local machine, commit the changes, and push them to your existing remote:
-
-```bash
-# On local machine
 bundle install
-
 git add .
 git commit -m "Update database configuration for production"
 git push uberspace
 ```
 
-While running `git push uberspace` you should now see "Deploying to example-app" as a message. Check the contents of `config/database.yml` to make sure it worked.
+### Create database tables
 
-## Create database tables
-
-With MySQL, you have to create the databases first. On your Uberspace, run:
+SSH into Uberspace and open MySQL:
 
 ```bash
-# On uberspace
 mysql
 ```
 
-And then create all the databases:
+Create all required databases:
 
 ```sql
 CREATE DATABASE username_appname_production CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
@@ -198,22 +189,23 @@ CREATE DATABASE username_appname_production_queue CHARACTER SET utf8mb4 COLLATE 
 CREATE DATABASE username_appname_production_cable CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;
 ```
 
-## Update indices
+Unlike with SQLite, databases in MySQL aren't created automatically. So here you're doing this yourself.
 
-If you used SQLite locally, you might run into problems where the data type of the foreign key fields (integer) doesn't match the ID fields (bigint). So let's update all tables that use foreign keys.
+### Update indices
+
+Create a migration to fix potential foreign key type issues:
 
 ```bash
-# On local machine
 rails generate migration ChangeForeignKeysToBigInt
 ```
 
-And then in that file, add the following migration for every table that uses a foreign key:
+Edit the migration file:
 
 ```ruby
 class ChangeForeignKeysToBigInt < ActiveRecord::Migration[8.0]
   def change
-    # Do this for every foreign key
-    # Check your db/schema.rb for foreign keys you might have
+    # Update every foreign key like this example:
+    # Check db/schema.rb for potential foreign keys
     remove_foreign_key :sessions, :users
     change_column :sessions, :user_id, :bigint, null: false
     add_foreign_key :sessions, :users
@@ -221,94 +213,87 @@ class ChangeForeignKeysToBigInt < ActiveRecord::Migration[8.0]
 end
 ```
 
-Then locally, run
+Run the migration locally, then commit and push:
 
 ```bash
 bin/rails db:migrate
+git add .
+git commit -m "Fix foreign key types"
+git push uberspace
 ```
 
-If everything worked your `db/schema.rb` should have updated. Commit it and push it to your uberspace.
+The reason for this migration is that the data type of the foreign key fields (integer) doesn't match the ID fields (bigint), especially if you use SQLite locally.
 
-## Check that the DB works
+### Verify database setup
 
-On your uberspace, you can now test if the database connection works. Run:
+On Uberspace:
 
 ```bash
-# On uberspace
 bundle exec rails db:setup RAILS_ENV=production
 ```
 
-Resolve any errors that might come up. That's the DB setup!
+## 3. Create a web backend
 
-# 3. Create a web backend
-
-Uberspace uses [web backends](https://manual.uberspace.de/web-backends/) to route requests to your application. I chose to run my app on a subdomain, so run:
+Make your app accessible from the outside:
 
 ```bash
 uberspace web backend set example-app.myuberspacename.uberspace.de --http --port 45678
 ```
 
-Note the port – it can be any random number between 1024 and 65535.
+Choose an unused port between 1024 and 65535. Verify port availability with `lsof -i :45678`. You can find more info on [web backends](https://manual.uberspace.de/web-backends/) in the Uberspace docs.
 
-# 4. Test run application
+## 4. Test run application
 
-Let's test if the application works:
-
-First precompile your assets and (if you haven't yet) migrate your DB:
+Prepare the application:
 
 ```bash
-# On uberspace
 bundle exec rake assets:precompile RAILS_ENV=production
 bundle exec rails db:setup RAILS_ENV=production
 ```
 
-Then run your Rails server in production:
+Start the Rails server:
 
-```
+```bash
 RAILS_ENV=production bundle exec rails server -e production -b 0.0.0.0 -p 45678
 ```
 
-If everything worked you should see the output from Puma. Try navigating to `example-app.myuberspacename.uberspace.de` to see if it worked. The first visit might take a bit longer. Afterwards, quit the app again.
+Visit your app's URL to verify it works. The first visit might take a bit longer to load.
 
-# 5. Using `supervisorctl` to run the application
+## 5. Process management with Supervisor
 
-To make sure the app runs without us, we can use [supervisorctl](https://manual.uberspace.de/daemons-supervisord/) to start and restart it automatically.
-
-Create a new configuration file in `~/etc/services.d/example-app.ini` and add the following:
+Create a new configuration file at `~/etc/services.d/example-app.ini`:
 
 ```ini
 [program:example-app]
 directory=%(ENV_HOME)s/apps/example-app
 command=bundle exec rails server -e production -b 0.0.0.0 -p 45678
 environment=RAILS_ENV="production"
-startsecs=60
 ```
 
-Then run:
+Stop any running instance of your app, then reload supervisor:
 
 ```bash
 supervisorctl reread
 supervisorctl update
 ```
 
-This should start the application. Check with `supervisorctl status` and by visiting your app. If something fails you can debug using `supervisorctl tail example-app`.
+Common Supervisor commands are `supervisorctl status` to see if your app is running, `supervisorctl tail example-app` to view the logs, and `supervisorctl restart example-app` to restart your app.
 
-# 6. Automate deployment
+## 6. Automate deployment
 
-That's it! Your application is now running on its own. Let's automate the deployment process by updating the hook in `repos/example-app.git/hooks/post-receive` hook:
+Update the post-receive hook to fully automate deployment:
 
 ```bash
-# On uberspace
-
 #!/bin/bash
+set -e
+
 TARGET_DIR="$HOME/apps/example-app"
-GIT_DIR="$HOME/repos/example-app.git"
 
 echo "Deploying to $TARGET_DIR..."
 
-# Checkout the latest code to working dir
 GIT_WORK_TREE="$TARGET_DIR" git checkout -f main
-cd ~/apps/example-app
+cd "$TARGET_DIR"
+
 bundle lock --add-platform ruby
 bundle install
 
@@ -320,20 +305,17 @@ bundle exec rake assets:precompile RAILS_ENV=production
 echo "Migrating DB..."
 bundle exec rails db:migrate RAILS_ENV=production
 
-LOGFILE="$HOME/apps/example-app/log/deploy.log"
-
-echo "$(date '+%Y-%m-%d %H:%M:%S') Restarting application..." | tee -a "$LOGFILE"
-nohup supervisorctl restart example-app >> "$LOGFILE" 2>&1 &
+echo "Restarting application..."
+supervisorctl restart example-app
 ```
 
-Make a change to your local repo and push it to your uberspace:
+Test the deployment workflow with a push from your local machine:
 
 ```bash
-# On local machine
 git push uberspace main
 ```
 
-You should then see something like the following output:
+You should see something like the following, which means you're done:
 
 ```
 ~/Code/example-app: git push uberspace main
@@ -350,10 +332,12 @@ remote: 1 installed gem you directly depend on is looking for funding.
 remote:   Run `bundle fund` for details
 remote: Precompiling assets...
 remote: Migrating DB
-remote: 2025-05-16 13:18:08 Restarting application...
+remote: Restarting application...
+remote: example-app: stopped
+remote: example-app: started
 To uberspace:~/repos/example-app.git
  + 96107e1...efebc48 main -> main (forced update)
 
 ```
 
-Check again by visiting the URL. You're done!
+After deployment completes, visit your app URL to verify everything works correctly.
