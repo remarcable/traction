@@ -172,6 +172,8 @@ git commit -m "Update database configuration for production"
 git push uberspace
 ```
 
+(After creating this guide, I became aware of `rails credentials` for managing credentials like this. I'd now recommend using that over environment variables.)
+
 ### Create database tables
 
 SSH into Uberspace and open MySQL:
