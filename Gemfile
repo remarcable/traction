@@ -68,3 +68,4 @@ group :test do
 end
 
 gem "heroicon-rails", "~> 0.2.9"
+gem 'dotenv-rails'
