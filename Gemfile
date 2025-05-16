@@ -9,7 +9,7 @@ group :development, :test do
   gem "sqlite3", ">= 2.1"
 end
 group :production do
-  gem 'mysql2', '~> 0.5.2'
+  gem "mysql2", "~> 0.5.2"
 end
 # Use the Puma web server [https://github.com/puma/puma]
 gem "puma", ">= 5.0"
@@ -68,4 +68,4 @@ group :test do
 end
 
 gem "heroicon-rails", "~> 0.2.9"
-gem 'dotenv-rails'
+gem "dotenv-rails"
