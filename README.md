@@ -6,9 +6,10 @@ A simple streak tracker to build and maintain daily habits.
 
 1. Clone the repository
 2. Install dependencies: `bundle install`
-3. Set up the database: `bin/rails db:setup`
-4. Start the server: `bin/rails server`
-5. Visit `http://localhost:3000`
+3. Create `.env`: `cp sample.env .env` (no need to fill out for development)
+4. Set up the database: `bin/rails db:setup`
+5. Start the server: `bin/rails server`
+6. Visit `http://localhost:3000`
 
 ## Motivation
 
