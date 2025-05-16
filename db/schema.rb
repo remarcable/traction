@@ -10,9 +10,9 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[8.0].define(version: 2025_05_07_131115) do
+ActiveRecord::Schema[8.0].define(version: 2025_05_16_095333) do
   create_table "habit_entries", force: :cascade do |t|
-    t.integer "habit_id", null: false
+    t.bigint "habit_id", null: false
     t.date "date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
@@ -23,14 +23,14 @@ ActiveRecord::Schema[8.0].define(version: 2025_05_07_131115) do
 
   create_table "habits", force: :cascade do |t|
     t.string "name"
-    t.integer "user_id", null: false
+    t.bigint "user_id", null: false
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
     t.index ["user_id"], name: "index_habits_on_user_id"
   end
 
   create_table "sessions", force: :cascade do |t|
-    t.integer "user_id", null: false
+    t.bigint "user_id", null: false
     t.string "ip_address"
     t.string "user_agent"
     t.datetime "created_at", null: false
