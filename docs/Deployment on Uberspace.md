@@ -15,7 +15,7 @@ This guide walks you through deploying a Rails application on [Uberspace](https:
     - [Set up MySQL](#set-up-mysql)
     - [Create database tables](#create-database-tables)
     - [Update indices](#update-indices)
-    - [Verify database setup](#verify-database-setup)
+    - [Initialize database](#initialize-database)
   - [3. Create a web backend](#3-create-a-web-backend)
   - [4. Test run application](#4-test-run-application)
   - [5. Process management with Supervisor](#5-process-management-with-supervisor)
@@ -226,7 +226,7 @@ git push uberspace
 
 The reason for this migration is that the data type of the foreign key fields (integer) doesn't match the ID fields (bigint), especially if you use SQLite locally.
 
-### Verify database setup
+### Initialize database
 
 On Uberspace:
 
