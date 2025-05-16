@@ -20,10 +20,8 @@ test:
   <<: *default
   database: storage/test.sqlite3
 
-# Store production database in the storage/ directory, which by default
-# is mounted as a persistent Docker volume in config/deploy.yml.
 production:
-  primary:
+  primary: &primary
     adapter: mysql2
     encoding: utf8mb4
     pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
@@ -31,30 +29,18 @@ production:
     password: <%= ENV.fetch("RAILS_DB_PASSWORD") %>
     host: localhost
     database: mrc_traction_production
+
   cache:
-    adapter: mysql2
-    encoding: utf8mb4
-    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-    username: <%= ENV.fetch("RAILS_DB_USERNAME") %>
-    password: <%= ENV.fetch("RAILS_DB_PASSWORD") %>
-    host: localhost
+    <<: *primary
     database: mrc_traction_production_cache
     migrations_paths: db/cache_migrate
+
   queue:
-    adapter: mysql2
-    encoding: utf8mb4
-    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-    username: <%= ENV.fetch("RAILS_DB_USERNAME") %>
-    password: <%= ENV.fetch("RAILS_DB_PASSWORD") %>
-    host: localhost
+    <<: *primary
     database: mrc_traction_production_queue
     migrations_paths: db/queue_migrate
+
   cable:
-    adapter: mysql2
-    encoding: utf8mb4
-    pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
-    username: <%= ENV.fetch("RAILS_DB_USERNAME") %>
-    password: <%= ENV.fetch("RAILS_DB_PASSWORD") %>
-    host: localhost
+    <<: *primary
     database: mrc_traction_production_cable
     migrations_paths: db/cable_migrate
