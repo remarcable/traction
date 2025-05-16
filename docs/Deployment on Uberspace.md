@@ -315,7 +315,7 @@ Test the deployment workflow with a push from your local machine:
 git push uberspace main
 ```
 
-You should see something like the following, which means you're done:
+You should see deployment logs similar to:
 
 ```
 ~/Code/example-app: git push uberspace main
@@ -340,4 +340,4 @@ To uberspace:~/repos/example-app.git
 
 ```
 
-After deployment completes, visit your app URL to verify everything works correctly.
+After deployment completes, visit your app URL to verify everything works correctly. Your Rails app is now deployed on Uberspace with automatic deployment via `git push`!

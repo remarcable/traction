@@ -11,6 +11,12 @@ A simple streak tracker to build and maintain daily habits.
 5. Start the server: `bin/rails server`
 6. Visit `http://localhost:3000`
 
+## Deployment
+
+Traction is a standard Rails app that you can deploy to any hosting environment.
+
+I've created a [deployment guide](./docs/Deployment%20on%20Uberspace.md) for deploying using `git push` specifically on [Uberspace](https://uberspace.de).
+
 ## Motivation
 
-I've always wanted a super simple streak tracker that's not distracting and where you can access the raw data. This project is my attempt to build something like that, and explore Ruby on Rails at the same time.
+I've always wanted a super simple streak tracker that's not distracting with raw access to the data. This project is my attempt to build this, and explore Ruby on Rails at the same time.
